@@ -23,3 +23,11 @@ cd goku/goku/dream && jupyter lab --allow-root
 # fuser -k 5000/tcp && kubectl -n mlflow port-forward svc/mlflow 5000 &
 curl https://localhost:2746/api/v1/workflows/argo -H "Authorization: $ARGO_TOKEN"
 # 200 OK
+
+# Set alias
+sudo snap alias microk8s.kubectl kubectl
+
+## Set sudo [permissions] for microk8s
+ sudo usermod -a -G microk8s ubuntu
+ sudo chown -R ubuntu ~/.kube
+ newgrp microk8s
