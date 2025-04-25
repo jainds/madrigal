@@ -1,17 +1,38 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: kubeflow
-  namespace: argocd
+  name: kubeflow # Or your preferred name
+  namespace: argocd       # Argo CD's namespace
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
   source:
-    repoURL: https://github.com/kubeflow/pipelines
-    path: manifests/kustomize/env/plain
-    targetRevision: HEAD
+    # --- Point to YOUR Git repository ---
+    repoURL: https://github.com/jainds/madrigal.git # e.g., https://github.com/your-org/my-infra-repo.git
+    # --- Point to the directory containing your kustomization.yaml overlay ---
+    path: k8s/my-kubeflow # The directory created in Step 1
+    # --- Specify the branch/tag in YOUR repo ---
+    targetRevision: 3af8514499f6ee4cdfcc9a45b17eac8b0b56e8c6 # Or 'main', or a specific commit/tag in your repo
+
+    # --- The source type is Kustomize (usually auto-detected) ---
+    kustomize: {}
+
   destination:
-    server: https://kubernetes.default.svc
+    server: https://kubernetes.default.svc # Your cluster
+    # --- The namespace defined in your kustomization.yaml ---
     namespace: kubeflow
+
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
+      # --- Essential for initial sync and fixing inconsistencies ---
+      - Replace=true
+      - ApplyOutOfSyncOnly=true
+      # --- Recommended: Allows Kustomize to apply server-side ---
+      # Helps with large resources and CRD updates. Requires Argo CD v2.4+
+      # and cluster admin privileges for Argo CD. May not be needed initially.
+      # - ServerSideApply=true
+    automated:
+      prune: true
+      selfHeal: true

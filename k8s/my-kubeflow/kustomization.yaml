@@ -20,7 +20,20 @@ patches:
     target:
       kind: Deployment # Target any existing kind, the SA will just be added
       name: cache-deployer-deployment # It doesn't modify the target, just adds the SA alongside
-
+# --- Patch 2: Explicitly add fsGroup to MinIO pod security context ---
+  - patch: |-
+      # Indentation is critical here
+      - op: add # Use 'add' or 'replace' - 'add' is safer if it might not exist
+        path: /spec/template/spec/securityContext/fsGroup
+        value: 1000
+      # Also add fsGroupChangePolicy for robustness (requires K8s 1.20+)
+      - op: add
+        path: /spec/template/spec/securityContext/fsGroupChangePolicy
+        value: OnRootMismatch
+    target:
+      kind: Deployment
+      name: minio
+      namespace: kubeflow # Ensure namespace match for target
 # Optional: Add common labels/annotations to all resources if needed
 # commonLabels:
 #   app.kubernetes.io/part-of: kubeflow-pipelines
