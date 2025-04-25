@@ -13,7 +13,7 @@ spec:
     # --- Point to the directory containing your kustomization.yaml overlay ---
     path: k8s/my-kubeflow # The directory created in Step 1
     # --- Specify the branch/tag in YOUR repo ---
-    targetRevision: 3af8514499f6ee4cdfcc9a45b17eac8b0b56e8c6 # Or 'main', or a specific commit/tag in your repo
+    targetRevision: 2aedb9351a640f7c831f216d30da5855a3334fd1 # Or 'main', or a specific commit/tag in your repo
 
     # --- The source type is Kustomize (usually auto-detected) ---
     kustomize: {}
