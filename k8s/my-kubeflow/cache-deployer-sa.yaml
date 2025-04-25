@@ -1,0 +1,11 @@
+# my-infra-repo/kfp-deployment/cache-deployer-sa.yaml
+# This file defines the missing SA that should have been in the 2.4.1 manifests
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: kubeflow-pipelines-cache-deployer-sa
+  # The namespace will be added by the kustomization.yaml's namespace field
+  labels:
+     # Add labels consistent with other KFP resources if desired
+     app: cache-deployer
+     application-crd-id: kubeflow-pipelines

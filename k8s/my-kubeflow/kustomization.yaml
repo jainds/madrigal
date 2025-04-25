@@ -1,0 +1,27 @@
+# my-infra-repo/kfp-deployment/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# --- Reference the two upstream Kustomize directories ---
+# Use 'resources' for remote targets. Kustomize will fetch and build them.
+resources:
+  - github.com/kubeflow/pipelines/manifests/kustomize/cluster-scoped-resources?ref=2.4.1
+  - github.com/kubeflow/pipelines/manifests/kustomize/env/platform-agnostic?ref=2.4.1
+
+# --- IMPORTANT: Define the target namespace ---
+# This ensures namespaced resources from the upstream manifests
+# are targeted correctly.
+namespace: kubeflow # Should match your desired KFP namespace
+
+# --- FIX: Add the missing Service Account ---
+# Create the cache-deployer-sa.yaml file (see below) and reference it
+patches:
+  - path: cache-deployer-sa.yaml
+    target:
+      kind: Deployment # Target any existing kind, the SA will just be added
+      name: cache-deployer-deployment # It doesn't modify the target, just adds the SA alongside
+
+# Optional: Add common labels/annotations to all resources if needed
+# commonLabels:
+#   app.kubernetes.io/part-of: kubeflow-pipelines
+#   app.kubernetes.io/managed-by: argocd
