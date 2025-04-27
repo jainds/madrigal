@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/bitnami/charts.git
     path: bitnami/mlflow
-    targetRevision: HEAD
+    targetRevision: b62113c5a1d5b7bae8896f382ef78b7dd561f48d
     helm:
       parameters:
         - name: tracking.service.type
