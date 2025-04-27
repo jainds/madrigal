@@ -9,8 +9,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/jainds/madrigal.git 
-    path: k8s/my-kubeflow 
-    targetRevision: c8f5492473d1211d19a5db9ec4b2af4c7e707db3 
+    path: k8s/argocd_apps/my-kubeflow 
+    targetRevision: e49916d7e17b9cf37bca07b57a2b471e5643ef1f 
 
     kustomize: {}
 
