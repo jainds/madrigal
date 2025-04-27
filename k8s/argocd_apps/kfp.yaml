@@ -8,31 +8,24 @@ metadata:
 spec:
   project: default
   source:
-    # --- Point to YOUR Git repository ---
-    repoURL: https://github.com/jainds/madrigal.git # e.g., https://github.com/your-org/my-infra-repo.git
-    # --- Point to the directory containing your kustomization.yaml overlay ---
-    path: k8s/my-kubeflow # The directory created in Step 1
-    # --- Specify the branch/tag in YOUR repo ---
-    targetRevision: 2aedb9351a640f7c831f216d30da5855a3334fd1 # Or 'main', or a specific commit/tag in your repo
+    repoURL: https://github.com/jainds/madrigal.git 
+    path: k8s/my-kubeflow 
+    targetRevision: c8f5492473d1211d19a5db9ec4b2af4c7e707db3 
 
-    # --- The source type is Kustomize (usually auto-detected) ---
     kustomize: {}
 
   destination:
-    server: https://kubernetes.default.svc # Your cluster
-    # --- The namespace defined in your kustomization.yaml ---
+    server: https://kubernetes.default.svc 
+    
     namespace: kubeflow
 
   syncPolicy:
     syncOptions:
       - CreateNamespace=true
       # --- Essential for initial sync and fixing inconsistencies ---
-      - Replace=true
+      # - Replace=true
       - ApplyOutOfSyncOnly=true
-      # --- Recommended: Allows Kustomize to apply server-side ---
-      # Helps with large resources and CRD updates. Requires Argo CD v2.4+
-      # and cluster admin privileges for Argo CD. May not be needed initially.
-      # - ServerSideApply=true
+
     automated:
       prune: true
       selfHeal: true

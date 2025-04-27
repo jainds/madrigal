@@ -1,4 +1,4 @@
-# my-infra-repo/kfp-deployment/kustomization.yaml
+# digital-ocean/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
@@ -11,15 +11,16 @@ resources:
 # --- IMPORTANT: Define the target namespace ---
 # This ensures namespaced resources from the upstream manifests
 # are targeted correctly.
-namespace: kubeflow # Should match your desired KFP namespace
+namespace: kubeflow 
 
 # --- FIX: Add the missing Service Account ---
 # Create the cache-deployer-sa.yaml file (see below) and reference it
 patches:
   - path: cache-deployer-sa.yaml
     target:
-      kind: Deployment # Target any existing kind, the SA will just be added
-      name: cache-deployer-deployment # It doesn't modify the target, just adds the SA alongside
+      kind: Deployment 
+      name: cache-deployer-deployment 
+# Fix the   pod level securityContext in minio    
 patchesStrategicMerge:
   - |-
     # This patch merges the securityContext into the pod spec template
@@ -29,12 +30,9 @@ patchesStrategicMerge:
       name: minio       # Match the resource name
       namespace: kubeflow # Match the resource namespace
     spec:
-      template:        # Navigate down to the pod template
+      template:        
         spec:
           securityContext: # Define the pod-level security context
             fsGroup: 1000 # Set the desired fsGroup
             fsGroupChangePolicy: OnRootMismatch # Add the policy
-# Optional: Add common labels/annotations to all resources if needed
-# commonLabels:
-#   app.kubernetes.io/part-of: kubeflow-pipelines
-#   app.kubernetes.io/managed-by: argocd
+
